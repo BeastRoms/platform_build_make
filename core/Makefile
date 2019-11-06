@@ -1202,13 +1202,18 @@ $(installed_product_services_notice_xml_gz): $(target_product_services_notice_fi
 	$(copy-file-to-target)
 endif
 
-ALL_DEFAULT_INSTALLED_MODULES += $(installed_notice_html_or_xml_gz)
-ALL_DEFAULT_INSTALLED_MODULES += $(installed_vendor_notice_xml_gz)
-ALL_DEFAULT_INSTALLED_MODULES += $(installed_product_notice_xml_gz)
-ALL_DEFAULT_INSTALLED_MODULES += $(installed_product_services_notice_xml_gz)
+# if we've been run my mm, mmm, etc, don't reinstall this every time
+ifeq ($(ONE_SHOT_MAKEFILE),)
+  ALL_DEFAULT_INSTALLED_MODULES += $(installed_notice_html_or_xml_gz)
+  ALL_DEFAULT_INSTALLED_MODULES += $(installed_vendor_notice_xml_gz)
+  ALL_DEFAULT_INSTALLED_MODULES += $(installed_product_notice_xml_gz)
+  ALL_DEFAULT_INSTALLED_MODULES += $(installed_product_services_notice_xml_gz)
+endif
 endif # PRODUCT_NOTICE_SPLIT
 
-ALL_DEFAULT_INSTALLED_MODULES += $(installed_notice_html_or_xml_gz)
+ifeq ($(ONE_SHOT_MAKEFILE),)
+  ALL_DEFAULT_INSTALLED_MODULES += $(installed_notice_html_or_xml_gz)
+endif
 
 $(eval $(call combine-notice-files, html, \
 	        $(tools_notice_file_txt), \
